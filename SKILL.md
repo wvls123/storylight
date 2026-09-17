@@ -1,104 +1,88 @@
 ---
 name: storylight
-description: Builds and adapts the Storylight interactive 3D bedtime book — Three.js pop-up pages, karaoke read-aloud, word taps, Qwen3-TTS/edge-tts, Poly Haven room props. Use when the user asks for an interactive children's book, Storylight, Лучик, 3D-сказку, karaoke book, or to clone/extend «Медвежонок Миша и упавшая звёздочка».
+description: Creates a new interactive 3D bedtime book from the user's request (story, hero, pages, voice, gestures) on the Storylight Three.js engine with karaoke and TTS. Use when the user wants an interactive children's book, 3D-сказку, karaoke book, Лучик, or Storylight — build what they asked, do not replay the demo about Mishka.
 ---
 
-# Storylight — интерактивная 3D-книга
+# Storylight — книга по запросу
 
-Готовый кит лежит в `book/`. Не собирай сцену с нуля и не тащи Blender, пока пользователь сам не попросил. Клонируй кит, меняй `pages.json`, озвучку и pop-up страницы.
+Ты не «показываешь готовую сказку». Ты **делаешь новую книгу из того, что сказал пользователь**.
 
-## Когда читать дальше
+`book/` — это **движок и живой пример**, не сюжет по умолчанию. Сказка про Мишу нужна только как референс посадки/karaoke или если человек явно просит именно её.
 
-- Схема страниц, жесты, посадка книги: [reference.md](reference.md)
-- Новый сюжет по шагам: [examples.md](examples.md)
+## Сначала запрос, потом сцена
 
-## Быстрый запуск эталона
+Из сообщения пользователя собери бриф. Чего нет — один короткий уточняющий вопрос **или** разумный дефолт, не подставляй Мишу.
+
+| Поле | Дефолт, если не сказали |
+|------|-------------------------|
+| Тема / сюжет | Обязательно из запроса. Нет темы — спроси. |
+| Герой | Из запроса, не медвежонок Миша |
+| Язык | русский |
+| Страниц | 4 |
+| Тон | добрая сказка на ночь |
+| Режим | «Читать мне» + «Я сам» + тап по слову |
+| Жесты | по одному на страницу, из сюжета |
+
+Потом напиши **новый** сюжет. Чужой эталон не копируй: другие имена, другие места, другая дуга, другие объекты.
+
+Разрешено оставить только технику: комната, стол, curl-страница, `seatBookOnTable`, karaoke, TTS-скрипт.
+
+## Конвейер (обязательный порядок)
+
+1. **Бриф** — 5–10 строк: герой, конфликт, 4 бита, финал, 1 жест на страницу.
+2. **Скопируй движок** в рабочую папку (`book/` или новый каталог). Не оставляй `pages.json` Миши.
+3. **Напиши `pages.json` с нуля** под этот бриф: `title`, `readText`, `words[]`, `objects[]`, `gesture`, пути art/audio.
+4. **Перепиши pop-up builders** в `app.js` под новые сцены и `object.id`. Старые `buildBedroom` / Миша / звёздочка / светлячки — удалить, если их нет в брифе.
+5. **Картинки и иконки** под новый сюжет (`generate_art.py` или новые PNG). Не подписывай обложку «Миша», если это не его книга.
+6. **Озвучка заново**: сотри старые `audio/page-*.mp3` и `audio/word-*.mp3`, затем `python book/scripts/generate_tts.py`.
+7. Обнови `PAGE_COUNT`, `<title>`, бренд в `index.html`.
+8. `python scripts/validate_kit.py --book <папка>` и прогон в браузере.
+
+Запуск:
 
 ```bash
-cd book
+cd <папка-книги>
 python -m http.server 8871
 ```
 
-Открыть http://127.0.0.1:8871/
+Только HTTP, не `file://`. Схема полей и посадка книги — [reference.md](reference.md). Примеры запросов — [examples.md](examples.md).
 
-`file://` не использовать: ES-модули Three.js с importmap требуют HTTP.
-
-## Что уже внутри `book/`
+## Движок (что копировать)
 
 | Путь | Роль |
 |------|------|
-| `index.html` | Оболочка, CDN Three 0.160.1, режимы «Читать мне» / «Я сам» |
-| `app.js` | Комната, стол, книга, curl-перелистывание, pop-up, karaoke, тапы |
-| `style.css` | Карточка текста, dock, vocab |
-| `pages.json` | Сюжет, слова с длительностями, объекты, жесты, пути к audio/art |
-| `audio/` | Готовые mp3+wav страниц и слов + `manifest.json` |
-| `assets/` | Текстуры страниц, иконки, CC0 glTF со стола Poly Haven, плюш Миши |
-| `scripts/generate_tts.py` | Qwen3-TTS VoiceDesign или fallback `edge-tts` |
-| `scripts/generate_art.py` | Pillow-заготовки страниц |
-| `scripts/download_polyhaven.py` | CC0 glTF 1k, без ключей |
+| `index.html` | Оболочка, Three 0.160.1, dock |
+| `app.js` | Комната, стол, книга, curl, pop-up, karaoke, тапы |
+| `style.css` | Карточка и dock |
+| `scripts/generate_tts.py` | Qwen3-TTS или `edge-tts`, без ключей |
+| `scripts/generate_art.py` | Pillow-заготовки |
+| `assets/models/` | CC0 стол/лампа/фонарь — комната, не сюжет |
 
-Эталон: 4 страницы, бренд «Лучик», сказка «Медвежонок Миша и упавшая звёздочка».
+Сюжетные файлы эталона (`pages.json`, `audio/page-*.mp3`, `icon-bear.png`, `buildBedroom`…) — **не контент новой книги**.
 
-## Как делать новую книгу
+## `pages.json` — только новый текст
 
-1. Скопируй `book/` в целевой проект (или правь этот).
-2. Перепиши `pages.json`: `title`, `readText`, `words[]`, `objects[]`, `gesture`, `audio`, `image`.
-3. Длительности `words[].d` подгоняй под реальную озвучку (сумма ≈ длина mp3).
-4. Сгенерируй речь: `python book/scripts/generate_tts.py` (см. ниже).
-5. При новых иллюстрациях — `python book/scripts/generate_art.py`, затем положи файлы на пути из JSON.
-6. В `app.js` добавь/замени `buildBedroom` / `buildGarden` / `buildMeadow` / `buildHome` под новые pop-up. Не ломай `seatBookOnTable`, `sitOnY`, тени и комнату.
-7. Проверь: `python scripts/validate_kit.py` и живой проход в браузере.
+Каждая страница: заголовок, `readText`, `hint` жеста, `words[]` с `d` (сумма ≈ длина mp3), `objects[]` с `id` = `userData.id` в 3D.
 
-Не выдумывай сюжет поверх эталона, если пользователь просит «эту книгу» — отдай как есть.
+Жест придумай из сюжета. Эталонные `drag-firefly` / `help-then-star` / `return-star` копируй только если жест тот же по смыслу.
 
-## Озвучка
+Речь:
 
-Порядок движков:
+- язык запроса (обычно русский), числа словами;
+- голос: `QWEN3_TTS_ROOT` → Qwen VoiceDesign, иначе `edge-tts` `ru-RU-SvetlanaNeural`;
+- страница `audio/page-<id>.mp3`, слова `audio/word-<slug>.mp3`;
+- karaoke по `words[].d`, не по Web Speech.
 
-1. Локальный Qwen3-TTS VoiceDesign, если задан `QWEN3_TTS_ROOT` (папка модели, не ключ).
-2. Иначе `edge-tts` голос `ru-RU-SvetlanaNeural` — ключ не нужен.
+## Когда можно открыть эталон
 
-```bash
-# Windows PowerShell
-$env:QWEN3_TTS_ROOT = "C:\path\to\qwen3-tts"
-python book/scripts/generate_tts.py
-```
+Только если пользователь сказал «покажи ту книгу», «Миша», «эталон», «как было». Иначе не отдавай сказку про Мишу как результат.
 
-Правила речи:
+## Качество
 
-- Текст сказки — русский. Числа словами.
-- Инструкция голоса уже в скрипте: тёплая «бабушка на ночь», не мультик.
-- Файл страницы: `audio/page-<id>.mp3`. Слова: `audio/word-<slug>.mp3`.
-- Karaoke идёт параллельно с mp3: подсветка по `words[].d`, не по Web Speech.
-- Тап по слову = синтез этого слова. Тап по объекту в 3D = `object.audio` или `speak`.
-- Если mp3 нет — `app.js` сам падает в `speechSynthesis` `ru-RU`. Это запасной путь, не основной.
+- Книга на столешнице: после мебели `seatBookOnTable()`.
+- Комната не пустая: стены, пол, лампа на `TABLE_TOP`.
+- На каждой странице pop-up, ударные объекты и жест из **этого** сюжета.
+- «Читать мне» подсвечивает новые слова. Имена на экране = имена из запроса.
+- Без Blender, без слайдера вместо Three.js, без ключей в git.
 
-## Секреты — жёстко
-
-В репозиторий и в чат **нельзя** класть API-ключи, токены, `.env`, SSH-ключи, `credentials.json`.
-
-- Ключей у этого кита нет. Poly Haven и edge-tts работают без секретов.
-- Qwen живёт локально. Путь только через env, никогда хардкод домашнего каталога пользователя.
-- Перед коммитом: `python scripts/scan_secrets.py`
-- Если нашёл секрет — вычисти файл, не коммить, ключ считать скомпрометированным.
-
-`.env.example` можно коммитить. Живой `.env` — нельзя.
-
-## Качество кадра (не пропускать)
-
-Из живой приёмки эталона:
-
-- Книга **стоит на столешнице**, не тонет в столе. После мебели всегда `seatBookOnTable()`.
-- Фон — комната (стены, пол, лампа), не чёрная пустота.
-- Лампа и фонарь сидят на `TABLE_TOP` через `sitOnY`.
-- Pop-up вырастает после перелистывания; на странице есть ударные объекты и жест.
-- «Читать мне» подсвечивает слова в такт. «Я сам» не запускает всю страницу.
-- Не подключай Blender MCP и не генерируй героя заново, если плюш уже в `assets/models/plush_bear/`.
-
-## Запреты
-
-- Не коммить секреты.
-- Не требовать Blender для веб-книги.
-- Не заменять Three.js на картинку-слайдер.
-- Не писать латиницу в озвучке, кроме официальных имён, если пользователь так попросил.
-- Не публиковать чужие ключи «чтобы завелось».
+Перед коммитом: `python scripts/scan_secrets.py`. Живой `.env` не коммитить.
