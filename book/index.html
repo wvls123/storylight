@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Медвежонок Миша и упавшая звёздочка — Лучик</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,500;7..72,700&family=Nunito:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="scene"></canvas>
+      <canvas id="sparkles"></canvas>
+
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true">✦</span>
+          <div>
+            <div class="brand-name">Лучик</div>
+            <div class="brand-book" id="book-title">Медвежонок Миша и упавшая звёздочка</div>
+          </div>
+        </div>
+        <div class="stars" id="stars" aria-live="polite"></div>
+        <div class="top-tools">
+          <label class="vol">
+            <span>звук</span>
+            <input id="volume" type="range" min="0" max="1" step="0.05" value="1" />
+          </label>
+        </div>
+      </header>
+
+      <article class="card" id="card">
+        <p class="page-kicker" id="page-kicker">Страница 1 из 4</p>
+        <h1 id="page-title">Погасла ночная звёздочка</h1>
+        <p class="story" id="story"></p>
+        <p class="meta">нажми на слово — услышишь его · нажми карточку — приблизить</p>
+        <p class="hint" id="hint"></p>
+      </article>
+
+      <aside class="vocab" id="vocab" hidden>
+        <img id="vocab-img" alt="" />
+        <strong id="vocab-word"></strong>
+      </aside>
+
+      <footer class="dock">
+        <button class="nav-btn" id="prev" aria-label="Предыдущая страница">‹</button>
+        <div class="modes">
+          <button class="pill primary" id="read-to-me">Читать мне</button>
+          <button class="pill" id="ill-read">Я сам</button>
+          <button class="pill ghost" id="pause" hidden>Пауза</button>
+        </div>
+        <button class="nav-btn" id="next" aria-label="Следующая страница">›</button>
+        <div class="zoom-tools" role="group" aria-label="Приближение">
+          <button class="nav-btn zoom-btn" id="zoom-out" aria-label="Дальше">−</button>
+          <button class="nav-btn zoom-btn" id="zoom-in" aria-label="Ближе">+</button>
+        </div>
+      </footer>
+
+      <p class="ph-credit">Powered by Poly Haven · плюшевый Миша · озвучка Qwen3-TTS</p>
+      <div class="toast" id="toast" hidden></div>
+    </div>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.160.1/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.160.1/examples/jsm/"
+        }
+      }
+    </script>
+    <script type="module">
+      import * as THREE from "three";
+      import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+      import { clone as cloneSkinned } from "three/addons/utils/SkeletonUtils.js";
+      window.THREE = THREE;
+      window.GLTFLoader = GLTFLoader;
+      window.SkeletonUtils = { clone: cloneSkinned };
+      await import("./app.js");
+    </script>
+  </body>
+</html>

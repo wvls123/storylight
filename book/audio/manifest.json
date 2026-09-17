@@ -1,0 +1,97 @@
+{
+  "engine": "qwen3-tts-voicedesign",
+  "voice_note": "Warm elderly Russian fairy-tale narrator, like a grandmother reading a gentle bedtime story to a child. Soft, magical, calm, clear diction, medium-slow pace, kind and slightly smiling, cozy and tender, not cartoon.",
+  "files": [
+    {
+      "id": "page-1",
+      "text": "В тёплой комнате лежал плюшевый медвежонок Миша. На полочке у кровати всегда светила его ночная звёздочка и тихо пела колыбельную. Но сегодня она погасла. Миша обнял подушку и тихонько всхлипнул: без звёздочки ему не уснуть.",
+      "file": "audio/page-1.mp3",
+      "exists": true,
+      "bytes": 199484
+    },
+    {
+      "id": "word-misha",
+      "text": "медвежонок Миша",
+      "file": "audio/word-misha.mp3",
+      "exists": true,
+      "bytes": 14396
+    },
+    {
+      "id": "word-krovat",
+      "text": "кровать",
+      "file": "audio/word-krovat.mp3",
+      "exists": true,
+      "bytes": 6164
+    },
+    {
+      "id": "word-podushka",
+      "text": "подушка",
+      "file": "audio/word-podushka.mp3",
+      "exists": true,
+      "bytes": 8492
+    },
+    {
+      "id": "word-zvezdochka",
+      "text": "ночная звёздочка",
+      "file": "audio/word-zvezdochka.mp3",
+      "exists": true,
+      "bytes": 12476
+    },
+    {
+      "id": "page-2",
+      "text": "Миша надел свой красный шарфик и вышел в тихий сад. Там мерцал маленький светлячок. Он кружился у лапок медвежонка и словно шептал: пойдём, я знаю, куда упала твоя звёздочка.",
+      "file": "audio/page-2.mp3",
+      "exists": true,
+      "bytes": 119924
+    },
+    {
+      "id": "word-svetlyachok",
+      "text": "светлячок",
+      "file": "audio/word-svetlyachok.mp3",
+      "exists": true,
+      "bytes": 15452
+    },
+    {
+      "id": "word-sharfik",
+      "text": "красный шарфик",
+      "file": "audio/word-sharfik.mp3",
+      "exists": true,
+      "bytes": 21380
+    },
+    {
+      "id": "page-3",
+      "text": "На поляне Миша увидел тусклую звёздочку в траве и зайчонка, который запутался в нитках от старого воздушника. Миша сначала помог зайчонку, а потом бережно поднял звёздочку. Она тихонько затеплилась в его лапках и прошептала: спасибо.",
+      "file": "audio/page-3.mp3",
+      "exists": true,
+      "bytes": 186308
+    },
+    {
+      "id": "word-zaichonok",
+      "text": "зайчонок",
+      "file": "audio/word-zaichonok.mp3",
+      "exists": true,
+      "bytes": 17420
+    },
+    {
+      "id": "word-spasibo",
+      "text": "спасибо",
+      "file": "audio/word-spasibo.mp3",
+      "exists": true,
+      "bytes": 9188
+    },
+    {
+      "id": "page-4",
+      "text": "Миша вернулся домой и поставил звёздочку на полочку. Она вспыхнула мягким золотым светом, и снова зазвучала колыбельная. Медвежонок улыбнулся, обнял подушку и сладко уснул. А в комнате стало тихо, тепло и спокойно. Вот и сказке конец, а кто слушал — тому спокойных снов.",
+      "file": "audio/page-4.mp3",
+      "exists": true,
+      "bytes": 194060
+    },
+    {
+      "id": "word-kolybelnaya",
+      "text": "колыбельная",
+      "file": "audio/word-kolybelnaya.mp3",
+      "exists": true,
+      "bytes": 10244
+    }
+  ]
+}

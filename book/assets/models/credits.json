@@ -1,0 +1,31 @@
+{
+  "powered_by": "Poly Haven",
+  "api": "https://api.polyhaven.com",
+  "downloaded": [
+    {
+      "id": "WoodenTable_01",
+      "role": "table under the book",
+      "parent": "scene",
+      "path": "assets/models/WoodenTable_01/WoodenTable_01_1k.gltf"
+    },
+    {
+      "id": "vintage_oil_lamp",
+      "role": "warm lamp prop on the table (left-front)",
+      "parent": "scene",
+      "path": "assets/models/vintage_oil_lamp/vintage_oil_lamp_1k.gltf"
+    },
+    {
+      "id": "wooden_lantern_01",
+      "role": "lantern prop on the table (right-front) and page-1 popup фонарик",
+      "parent": "scene + popupRoot",
+      "path": "assets/models/wooden_lantern_01/wooden_lantern_01_1k.gltf"
+    },
+    {
+      "id": "quaternius_fox",
+      "role": "Зорька in every page popup (Poly Haven has no fox/animal)",
+      "parent": "popupRoot",
+      "path": "assets/models/quaternius_fox/fox.glb",
+      "license": "CC0 Quaternius Ultimate Animated Animals"
+    }
+  ]
+}
