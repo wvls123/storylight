@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>Медвежонок Миша и упавшая звёздочка — Лучик</title>
+    <title>Собери свою сказку — Лучик</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -14,6 +14,88 @@
   </head>
   <body>
     <div id="app">
+      <main class="generator" id="generator">
+        <div class="generator-glow generator-glow-a" aria-hidden="true"></div>
+        <div class="generator-glow generator-glow-b" aria-hidden="true"></div>
+        <div class="generator-shell">
+          <header class="generator-head">
+            <a class="generator-brand" href="./" aria-label="Лучик — новая сказка">
+              <span class="generator-brand-mark" aria-hidden="true">✦</span>
+              <span>
+                <small>Лучик</small>
+                <strong>личные сказки,<br />которые светятся</strong>
+              </span>
+            </a>
+            <span class="generator-note">4 страницы · 3D · озвучка</span>
+          </header>
+
+          <section class="generator-grid">
+            <div class="generator-copy">
+              <p class="eyebrow">Сказка на ночь за минуту</p>
+              <h1>Придумай мир,<br /><em>где герой — это он.</em></h1>
+              <p class="generator-lead">
+                Введи имя, выбери героя и подскажи тему. Лучик соберёт новую историю,
+                которую можно открыть по своей ссылке.
+              </p>
+              <div class="generator-proof" aria-label="Что будет внутри">
+                <span><b>01</b> свой сюжет</span>
+                <span><b>02</b> интерактивная книга</span>
+                <span><b>03</b> чтение вслух</span>
+              </div>
+            </div>
+
+            <div class="generator-card">
+              <div class="card-ribbon">собрать историю</div>
+              <form id="story-form">
+                <label class="field">
+                  <span>Как зовут героя?</span>
+                  <input id="story-name" name="name" type="text" maxlength="32" placeholder="Например, Лёва" autocomplete="off" required />
+                </label>
+                <label class="field">
+                  <span>Кто он?</span>
+                  <input id="story-hero" name="hero" type="text" maxlength="36" placeholder="маленький лисёнок" autocomplete="off" required />
+                </label>
+                <fieldset class="theme-field">
+                  <legend>О чём будет приключение?</legend>
+                  <div class="theme-chips" role="list">
+                    <button type="button" class="theme-chip is-selected" data-theme="волшебный лес">волшебный лес</button>
+                    <button type="button" class="theme-chip" data-theme="море и маяк">море и маяк</button>
+                    <button type="button" class="theme-chip" data-theme="облачный сад">облачный сад</button>
+                  </div>
+                  <input id="story-theme" name="theme" type="text" maxlength="48" value="волшебный лес" placeholder="или напиши свою тему" autocomplete="off" required />
+                </fieldset>
+                <button class="make-story" type="submit">
+                  <span>Собрать мою сказку</span>
+                  <span class="make-story-arrow" aria-hidden="true">↗</span>
+                </button>
+                <p class="form-footnote">Ничего не сохраняется — имя живёт только в ссылке.</p>
+              </form>
+            </div>
+          </section>
+
+          <section class="generator-result" id="generator-result" hidden>
+            <div>
+              <p class="eyebrow">История готова</p>
+              <h2 id="result-title">Твоя сказка ждёт</h2>
+              <p id="result-teaser"></p>
+            </div>
+            <div class="result-actions">
+              <label class="share-link">
+                <span>Ссылка на книгу</span>
+                <input id="story-link" type="text" readonly />
+              </label>
+              <button class="copy-link" id="copy-link" type="button">Скопировать</button>
+              <a class="open-book" id="open-book" href="#">Открыть книгу <span aria-hidden="true">→</span></a>
+            </div>
+          </section>
+
+          <footer class="generator-footer">
+            <a href="?demo=1">Посмотреть пример Миши</a>
+            <span>Лучик · интерактивные сказки</span>
+          </footer>
+        </div>
+      </main>
+
       <canvas id="scene"></canvas>
       <canvas id="sparkles"></canvas>
 
@@ -27,6 +109,7 @@
         </div>
         <div class="stars" id="stars" aria-live="polite"></div>
         <div class="top-tools">
+          <a class="new-story" href="./">новая сказка</a>
           <label class="vol">
             <span>звук</span>
             <input id="volume" type="range" min="0" max="1" step="0.05" value="1" />
@@ -61,9 +144,12 @@
         </div>
       </footer>
 
-      <p class="ph-credit">Powered by Poly Haven · плюшевый Миша · озвучка Qwen3-TTS</p>
+      <p class="ph-credit">Powered by Poly Haven · персональная история · озвучка в браузере</p>
       <div class="toast" id="toast" hidden></div>
     </div>
+
+    <script src="./story-generator.js"></script>
+    <script src="./generator.js" defer></script>
 
     <script type="importmap">
       {

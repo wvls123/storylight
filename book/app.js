@@ -1,4 +1,4 @@
-/* Лучик — Медвежонок Миша и упавшая звёздочка */
+/* Лучик — интерактивная персональная книга */
 (() => {
   const PAGE_COUNT = 4;
   let TABLE_TOP = 1.12;
@@ -62,6 +62,24 @@
 
   function currentPage() {
     return state.book.pages[state.pageIndex];
+  }
+
+  function pageCount() {
+    return state.book && state.book.pages ? state.book.pages.length : PAGE_COUNT;
+  }
+
+  function characterHit() {
+    const character = (state.book && state.book.character) || {
+      name: "Миша",
+      species: "медвежонок",
+    };
+    return {
+      id: "hero",
+      label: character.name,
+      speak: character.species + " " + character.name,
+      icon: "assets/icon-bear.png",
+      audio: null,
+    };
   }
 
   function ensureAudio() {
@@ -184,7 +202,7 @@
 
   function renderStars() {
     starsEl.innerHTML = "";
-    for (let i = 0; i < PAGE_COUNT; i += 1) {
+    for (let i = 0; i < pageCount(); i += 1) {
       const star = document.createElement("div");
       star.className = "star" + (i <= state.pageIndex ? " on" : "");
       star.innerHTML =
@@ -195,7 +213,7 @@
 
   function renderCard() {
     const page = currentPage();
-    kickerEl.textContent = "Страница " + page.id + " из 4";
+    kickerEl.textContent = "Страница " + page.id + " из " + pageCount();
     titleEl.textContent = page.title;
     hintEl.textContent = page.hint;
     storyEl.innerHTML = "";
@@ -776,13 +794,7 @@
   }
 
   function placeBear(x, y, z, height) {
-    const hit = {
-      id: "misha",
-      label: "Миша",
-      speak: "медвежонок Миша",
-      icon: "assets/icon-bear.png",
-      audio: "audio/word-misha.mp3",
-    };
+    const hit = characterHit();
     if (models.bear) {
       const bear = models.bear.clone(true);
       scaleByHeight(bear, height);
@@ -856,13 +868,7 @@
     enableShadows(g);
     g.traverse((obj) => {
       if (obj.isMesh) {
-        markHit(obj, {
-          id: "misha",
-          label: "Миша",
-          speak: "медвежонок Миша",
-          icon: "assets/icon-bear.png",
-          audio: "audio/word-misha.mp3",
-        });
+        markHit(obj, characterHit());
       }
     });
     return g;
@@ -1454,7 +1460,7 @@
   }
 
   async function goPage(nextIndex) {
-    if (nextIndex < 0 || nextIndex >= PAGE_COUNT || nextIndex === state.pageIndex) return;
+    if (nextIndex < 0 || nextIndex >= pageCount() || nextIndex === state.pageIndex) return;
     if (state.flipping) return;
     stopSpeech();
     state.flipping = true;
@@ -1585,11 +1591,21 @@
   };
 
   async function main() {
+    const customBook = window.StorylightStory && window.StorylightStory.fromLocation(window.location);
+    const isDemo = new URLSearchParams(window.location.search).get("demo") === "1";
+    const shouldOpenBook = Boolean(customBook || isDemo);
+    document.body.classList.add(shouldOpenBook ? "viewer-mode" : "generator-mode");
+    if (!shouldOpenBook) return;
+
     const bootUi = viewportSize();
     sparkleCanvas.width = bootUi.w;
     sparkleCanvas.height = bootUi.h;
-    const res = await fetch("pages.json");
-    state.book = await res.json();
+    if (customBook) {
+      state.book = customBook;
+    } else {
+      const res = await fetch("pages.json");
+      state.book = await res.json();
+    }
     $("book-title").textContent = state.book.title;
     document.title = state.book.title + " — Лучик";
     renderCard();
